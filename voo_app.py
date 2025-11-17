@@ -23,3 +23,8 @@ col1, col2 = st.columns(2)
 col1.metric(label="🔻 安値 最頻値", value=f"${low_mode:.2f}")
 col2.metric(label="🔺 高値 最頻値", value=f"${high_mode:.2f}")
 st.caption(f"📅 更新日：{today}")
+# 値幅（％）の計算
+price_range_percent = ((high_mode - low_mode) / low_mode) * 100
+
+# 値幅の表示
+st.metric(label="📊 最頻値ベースの値幅", value=f"{price_range_percent:.2f}%")
