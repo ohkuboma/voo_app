@@ -1,4 +1,4 @@
-dimport pandas as pd
+import pandas as pd
 from statistics import mode
 import yfinance as yf
 import streamlit as st
