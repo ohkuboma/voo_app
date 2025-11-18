@@ -1,4 +1,4 @@
-import pandas as pd
+dimport pandas as pd
 from statistics import mode
 import yfinance as yf
 import streamlit as st
@@ -38,11 +38,11 @@ def get_voo_high_low_modes(buy_price=None):
     current_price = df.iloc[-1]['Close']
 
     profit_percent = None
-    tax_adjusted_profit = None
+    tax_profit_percent = None
     if buy_price is not None:
         try:
             profit_percent = round((current_price - buy_price) / buy_price * 100, 2)
-            tax_adjusted_profit = round(profit_percent * 0.8, 2)  # 税率20%を考慮
+            tax_profit_percent = round(profit_percent * 0.8, 2)  # 仮に20%課税
         except ZeroDivisionError:
             st.error("買値が0のため利益計算できませんでした。")
 
@@ -55,7 +55,7 @@ def get_voo_high_low_modes(buy_price=None):
         'current_price': current_price,
         'buy_price': buy_price,
         'profit_percent': profit_percent,
-        'tax_adjusted_profit': tax_adjusted_profit,
+        'tax_profit_percent': tax_profit_percent,
         'df': df
     }
 
@@ -67,18 +67,20 @@ buy_price_input = st.number_input("買値を入力してください", min_value
 if st.button("計算する"):
     result = get_voo_high_low_modes(buy_price=buy_price_input)
 
-    # 上段 3列
+    # 最上段メトリクス（最頻高値・最頻安値・値幅割合）
     col1, col2, col3 = st.columns(3)
     col1.metric("最頻高値", result['most_frequent_high'])
     col2.metric("最頻安値", result['most_frequent_low'])
     col3.metric("値幅割合 (%)", result['width_ratio_percent'])
 
-    # 下段 4列
+    # 下段メトリクス（買値・現在価格・利益率・税引後利益率）
     col4, col5, col6, col7 = st.columns(4)
     col4.metric("買値", result['buy_price'])
     col5.metric("現在価格", round(result['current_price'], 2))
-    col6.metric("予想利益率 (%)", result['profit_percent'])
-    col7.metric("税引後利益率 (%)", result['tax_adjusted_profit'])
+    if result['profit_percent'] is not None:
+        col6.metric("予想利益率 (%)", result['profit_percent'])
+    if result['tax_profit_percent'] is not None:
+        col7.metric("税引後利益率 (%)", result['tax_profit_percent'])
 
     st.subheader("📉 値幅の割合が最も小さい日")
     st.write(result['min_range_day'].to_frame().T)
