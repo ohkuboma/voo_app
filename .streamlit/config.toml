@@ -1,6 +1,6 @@
 [theme]
-primaryColor="#0E1117"
-backgroundColor="#F5F5F5"
-secondaryBackgroundColor="#FFFFFF"
-textColor="#262730"
-font="sans serif"
+primaryColor = "#4CAF50"         # ボタンなどの主カラー
+backgroundColor = "#F9F9F9"      # 背景色
+secondaryBackgroundColor = "#FFFFFF" # ボックス・パネルなどの背景
+textColor = "#333333"            # テキスト色
+font = "sans serif"              # フォント：serif / sans serif / monospace
